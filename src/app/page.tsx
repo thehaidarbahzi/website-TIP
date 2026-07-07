@@ -1,61 +1,53 @@
 "use client";
 
-import React, { useLayoutEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/sections/HeroSection";
 import TimelineSection from "@/components/sections/TimelineSection";
 import CompetitionSection from "@/components/sections/CompetitionSection";
 import AboutUsSection from "@/components/sections/AboutUsSection";
+import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
+import AnimatedSection from "@/components/providers/AnimatedSection";
 
 export default function LandingPage() {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
-    const ctx = gsap.context(() => {
-      const panels = gsap.utils.toArray<HTMLElement>(".panel-hidden");
-      
-      // Susun z-index panel tersembunyi berurutan
-      panels.forEach((panel, i) => {
-        panel.style.zIndex = (10 + i).toString();
-      });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top top",
-          end: "+=300%", // scroll length (100% per panel)
-          pin: true,
-          scrub: 1,
-        }
-      });
-
-      panels.forEach((panel) => {
-        // Animasi clip path menggunakan segitiga
-        // Dari titik kecil di tengah bawah
-        // Ke segitiga raksasa yang menutupi seluruh layar
-        tl.to(panel, {
-          clipPath: "polygon(50% -150%, 250% 100%, -150% 100%)",
-          ease: "none",
-        });
-      });
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <>
-      <Navbar />
-      <main ref={containerRef} className="relative w-full h-screen overflow-hidden">
-        <HeroSection />
-        <TimelineSection />
-        <CompetitionSection />
-        <AboutUsSection />
-      </main>
-    </>
+    <SmoothScrollProvider>
+      <HeroSection />
+      <AnimatedSection type="up" id="timeline-wrapper">
+        <div
+          className="relative w-full pb-16"
+          style={{
+            backgroundImage: "url('/hero/background.svg')",
+            backgroundRepeat: "repeat-y",
+            backgroundSize: "100%",
+            backgroundPosition: "center",
+          }}
+        >
+          <div className="pointer-events-none absolute inset-x-0 top-[-80px] sm:top-[-150px] z-0 h-full w-full" aria-hidden="true">
+            <svg viewBox="0 0 1440 347" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute inset-0 h-auto w-full">
+              <path d="M205 57C103.5 55 45.1667 63 -12.5 75V184.5C52 179.5 119.971 175.264 205 174C327.875 172.173 335.5 212 519.5 184.5C703.5 157 661.667 135.333 710.5 121.5C715.5 97.3334 721.1 24.9 697.5 26.5C668 28.5 635.5 53 519.5 75C403.5 97 306.5 59 205 57Z" fill="#FD5102" fillOpacity="0.8" stroke="#000" stroke-width="2"/>
+              <path d="M1244.91 56.5261C1346.41 54.5262 1404.75 62.5261 1462.41 74.5261V184.026C1397.91 179.026 1329.94 174.79 1244.91 173.526C1122.04 171.7 1114.41 211.526 930.414 184.026C746.414 156.526 788.247 134.859 739.414 121.026C734.414 96.8595 728.814 24.4261 752.414 26.0261C781.914 28.0261 814.414 52.5261 930.414 74.5261C1046.41 96.5262 1143.41 58.5261 1244.91 56.5261Z" fill="#BD4DF9" fillOpacity="0.8" stroke="#000" stroke-width="2"/>
+              <path d="M261 338C119.4 359.2 26 329.167 -3 311.5V185C21.3333 201.5 108.2 230.6 261 215C452 195.5 395.394 184.57 567.5 173C746 161 728.5 161 897 173C1054.6 184.224 1101.5 202 1237.5 215C1346.3 225.4 1460.83 191.333 1504.5 173V289.5C1462.17 303.833 1349.5 333.6 1237.5 338C1097.5 343.5 1043.5 300 897 289.5C750.5 279 740 279 567.5 289.5C395 300 438 311.5 261 338Z" fill="#BD4DF9" fillOpacity="0.8" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+              <path d="M247 165C105.4 143.8 12 173.833 -17 191.5V318C7.33333 301.5 94.2 272.4 247 288C438 307.5 381.394 318.43 553.5 330C732 342 714.5 342 883 330C1040.6 318.776 1087.5 301 1223.5 288C1332.3 277.6 1446.83 311.667 1490.5 330V213.5C1448.17 199.167 1335.5 169.4 1223.5 165C1083.5 159.5 1029.5 203 883 213.5C736.5 224 726 224 553.5 213.5C381 203 424 191.5 247 165Z" fill="#FD5102" fillOpacity="0.8" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="720" cy="85" r="75" fill="#fff" stroke="#000" stroke-width="20"/>
+              <circle cx="720" cy="85" r="74" stroke="#fff" stroke-width="2" stroke-dasharray="12 12"/>
+              <circle cx="701" cy="69" r="10" fill="#000"/>
+              <circle cx="741" cy="69" r="10" fill="#000"/>
+              <circle cx="741" cy="104" r="10" fill="#000"/>
+              <circle cx="701" cy="104" r="10" fill="#000"/>
+              <path d="M434.5 93.5C450.667 96.8333 492.649 91.8605 519.5 87.5C578 78 574.833 75.1667 579.5 74.5" stroke="#F5F5F5" stroke-width="2" stroke-linecap="round"/>
+              <path d="M977.5 88.5C961.333 91.8333 930.351 85.8605 903.5 81.5C845 72 831.667 61.6667 827 61" stroke="#F5F5F5" stroke-width="2" stroke-linecap="round"/>
+              <path d="M801.5 307.5C785.333 310.833 730.679 311.152 703.5 310C644.5 307.5 638.167 305.167 633.5 304.5" stroke="#F5F5F5" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <TimelineSection />
+          <AnimatedSection type="up" duration={0.9}>
+            <CompetitionSection />
+          </AnimatedSection>
+          <AnimatedSection type="up" duration={0.9} delay={0.15}>
+            <AboutUsSection />
+          </AnimatedSection>
+        </div>
+      </AnimatedSection>
+    </SmoothScrollProvider>
   );
 }

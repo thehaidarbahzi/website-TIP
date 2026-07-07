@@ -1,16 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
-import { Navigation } from "@/components/layout/Navigation";
-import { SessionProvider } from "next-auth/react";
+import LayoutClient from "./LayoutClient";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
   subsets: ["latin"],
 });
 
@@ -27,14 +21,10 @@ export default function RootLayout({
   return (
     <html
       lang="id"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${montserrat.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col text-slate-900 dark:text-slate-50">
-        <div className="bg-animated-gradient"></div>
-        <Navigation />
-        <main className="flex-1 pt-16 md:pt-20 pb-20 md:pb-8">
-          {children}
-        </main>
+      <body className="min-h-full flex flex-col bg-white text-slate-900">
+        <LayoutClient>{children}</LayoutClient>
       </body>
     </html>
   );

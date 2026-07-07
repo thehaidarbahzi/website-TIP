@@ -24,12 +24,9 @@ body {
 
 /* Base styles for the full screen sections */
 .panel {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  will-change: clip-path;
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
 }
@@ -43,18 +40,6 @@ body {
 /* Colors for specific panels */
 .bg-hero {
   background: linear-gradient(135deg, #ede9fe, #f3e8ff);
-}
-
-.bg-timeline {
-  background-color: #ffffff;
-}
-
-.bg-competition {
-  background: linear-gradient(135deg, #fdf4ff, #fae8ff);
-}
-
-.bg-about {
-  background: linear-gradient(135deg, #fff7ed, #ffedd5);
 }
 
 /* Glassmorphism Utilities */

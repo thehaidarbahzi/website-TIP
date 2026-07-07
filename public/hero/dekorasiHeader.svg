@@ -1,0 +1,30 @@
+<svg width="594" height="500" viewBox="0 0 594 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+<ellipse cx="407.5" cy="187" rx="187" ry="186.5" transform="rotate(90 407.5 187)" fill="url(#paint0_radial_96_110)"/>
+<circle cx="187" cy="313" r="187" transform="rotate(90 187 313)" fill="url(#paint1_radial_96_110)"/>
+<rect x="221" y="229" width="51" height="51" rx="6" transform="rotate(90 221 229)" fill="white" fill-opacity="0.2"/>
+<rect x="271" y="280" width="51" height="50" rx="6" transform="rotate(90 271 280)" fill="white" fill-opacity="0.2"/>
+<rect x="271" y="229" width="51" height="50" rx="6" transform="rotate(90 271 229)" fill="white" fill-opacity="0.2"/>
+<rect x="221" y="280" width="51" height="51" rx="6" transform="rotate(90 221 280)" fill="white" fill-opacity="0.2"/>
+<rect x="323" y="229" width="51" height="52" rx="6" transform="rotate(90 323 229)" fill="white" fill-opacity="0.2"/>
+<rect x="221" y="331" width="50" height="51" rx="6" transform="rotate(90 221 331)" fill="white" fill-opacity="0.2"/>
+<rect x="221" y="331" width="50" height="51" rx="6" transform="rotate(90 221 331)" fill="white" fill-opacity="0.2"/>
+<rect x="374" y="229" width="51" height="51" rx="6" transform="rotate(90 374 229)" fill="white" fill-opacity="0.2"/>
+<rect x="374" y="280" width="51" height="51" rx="6" transform="rotate(90 374 280)" fill="white" fill-opacity="0.2"/>
+<rect x="424" y="229" width="51" height="50" rx="6" transform="rotate(90 424 229)" fill="white" fill-opacity="0.2"/>
+<rect x="323" y="331" width="50" height="52" rx="6" transform="rotate(90 323 331)" fill="white" fill-opacity="0.2"/>
+<rect x="221" y="282" width="51" height="51" rx="6" transform="rotate(90 221 282)" fill="white" fill-opacity="0.2"/>
+<rect x="323" y="229" width="51" height="52" rx="6" transform="rotate(90 323 229)" fill="white" fill-opacity="0.2"/>
+<rect x="323" y="229" width="51" height="52" rx="6" transform="rotate(90 323 229)" fill="white" fill-opacity="0.02"/>
+<rect x="475" y="280" width="51" height="51" rx="6" transform="rotate(90 475 280)" fill="white" fill-opacity="0.2"/>
+<rect x="526" y="229" width="51" height="51" transform="rotate(90 526 229)" fill="white" fill-opacity="0.2"/>
+<defs>
+<radialGradient id="paint0_radial_96_110" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(407.5 187) rotate(90) scale(186.5 187)">
+<stop stop-color="#FF5401"/>
+<stop offset="1" stop-color="#FF5401" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="paint1_radial_96_110" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(187 313) rotate(90) scale(187)">
+<stop stop-color="#6C17C2"/>
+<stop offset="1" stop-color="#6C17C2" stop-opacity="0"/>
+</radialGradient>
+</defs>
+</svg>
