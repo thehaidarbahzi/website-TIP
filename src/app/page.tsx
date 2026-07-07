@@ -37,6 +37,10 @@ export default function LandingPage() {
               <circle cx="741" cy="69" r="10" fill="#000"/>
               <circle cx="741" cy="104" r="10" fill="#000"/>
               <circle cx="701" cy="104" r="10" fill="#000"/>
+              <path d="M701 69C703.333 73 710.79 83.049 718 89.5C727.5 98 737.333 99.6667 741.5 103" stroke="#000" stroke-width="12" stroke-linecap="round"/>
+              <path d="M701 69C703.333 73 710.79 83.049 718 89.5C727.5 98 737.333 99.6667 741.5 103" stroke="#fff" stroke-width="10" stroke-linecap="round"/>
+              <path d="M741.5 69C739.167 73 731.71 83.049 724.5 89.5C715 98 705.167 99.6667 701 103" stroke="#000" stroke-width="12" stroke-linecap="round"/>
+              <path d="M741.5 69C739.167 73 731.71 83.049 724.5 89.5C715 98 705.167 99.6667 701 103" stroke="#fff" stroke-width="10" stroke-linecap="round"/>
               <path d="M434.5 93.5C450.667 96.8333 492.649 91.8605 519.5 87.5C578 78 574.833 75.1667 579.5 74.5" stroke="#F5F5F5" stroke-width="2" stroke-linecap="round"/>
               <path d="M977.5 88.5C961.333 91.8333 930.351 85.8605 903.5 81.5C845 72 831.667 61.6667 827 61" stroke="#F5F5F5" stroke-width="2" stroke-linecap="round"/>
               <path d="M801.5 307.5C785.333 310.833 730.679 311.152 703.5 310C644.5 307.5 638.167 305.167 633.5 304.5" stroke="#F5F5F5" stroke-width="2" stroke-linecap="round">
