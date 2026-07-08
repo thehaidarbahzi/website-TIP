@@ -13,7 +13,7 @@ export default function LandingPage() {
       <HeroSection />
       <AnimatedSection type="up" id="timeline-wrapper">
         <div
-          className="relative w-full pb-16"
+          className="relative w-full pb-16 bg-white"
           style={{
             backgroundImage: "url('/hero/background.svg')",
             backgroundRepeat: "repeat-y",

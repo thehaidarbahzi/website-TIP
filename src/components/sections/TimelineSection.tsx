@@ -68,7 +68,7 @@ export default function TimelineSection() {
 
   return (
     <section id="timeline" className="panel items-center justify-center">
-      <div className="w-full h-full flex flex-col pt-20 md:pt-70 pb-12 overflow-y-auto no-scrollbar relative">
+      <div className="w-full h-full flex flex-col pt-20 md:pt-140 pb-12 overflow-y-auto no-scrollbar relative">
         <div className="max-w-5xl mx-auto px-6 w-full flex-grow">
           
           <div ref={headerRef} className="text-center mb-12 flex-shrink-0">
