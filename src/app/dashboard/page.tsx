@@ -6,7 +6,8 @@ import Link from "next/link";
 
 export default function DashboardPage() {
   const [user, setUser] = useState<any>(null);
-  const [showFinalist, setShowFinalist] = useState(false);
+  const [showFullpaper, setShowFullpaper] = useState(false);
+  const [showFinal, setShowFinal] = useState(false);
 
   useEffect(() => {
     const session = localStorage.getItem("tip_current_user");
@@ -14,13 +15,25 @@ export default function DashboardPage() {
       setUser(JSON.parse(session));
     }
     
-    // Check if it's after Sept 30 2026 for Finalist Announcement
-    const isDebug = localStorage.getItem("debug_time_bypass") === "true";
+    // Check timeline for fullpaper and PPT
+    const debugLevel = localStorage.getItem("debug_time_bypass");
     const now = new Date();
-    const announcementDate = new Date("2026-09-30T00:00:00");
-    if (isDebug || now >= announcementDate) {
-      setShowFinalist(true);
+    const abstrakAnnounceDate = new Date("2026-08-12T00:00:00");
+    const fullpaperAnnounceDate = new Date("2026-09-17T00:00:00");
+
+    let isFullpaper = now >= abstrakAnnounceDate;
+    let isFinal = now >= fullpaperAnnounceDate;
+
+    if (debugLevel === "1") {
+      isFullpaper = true;
+      isFinal = false;
+    } else if (debugLevel === "2") {
+      isFullpaper = true;
+      isFinal = true;
     }
+
+    setShowFullpaper(isFullpaper);
+    setShowFinal(isFinal);
   }, []);
 
   if (!user) return <div className="p-8">Memuat beranda...</div>;
@@ -56,7 +69,27 @@ export default function DashboardPage() {
             Pengumuman Terbaru
           </h2>
           
-          {showFinalist ? (
+          {showFinal ? (
+            <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-[2rem] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.15)] hover:-translate-y-2 hover:bg-white/15 hover:border-orange-400/50 hover:shadow-[0_30px_60px_rgba(251,146,60,0.2)] transition-all duration-300 relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-400/10 to-amber-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="flex flex-col sm:flex-row items-start gap-6 relative z-10">
+                <div className="w-16 h-16 rounded-[1.2rem] bg-white/20 backdrop-blur-md border border-white/30 text-orange-300 flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform duration-300">
+                  <BellRing size={32} />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-amber-300 mb-3 drop-shadow-sm pb-1">Selamat, Anda Masuk Final!</h3>
+                  <p className="text-white/80 text-base font-medium leading-relaxed mb-6">
+                    Luar biasa! Tim Anda berhasil mencapai tahap akhir. Silakan kumpulkan file presentasi (PPT) Anda sebagai persiapan untuk Grand Final.
+                  </p>
+                  {user?.category !== "poster" && (
+                    <Link href="/dashboard/ppt" className="inline-block bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/30 text-white text-base font-bold py-3.5 px-8 rounded-[1.2rem] shadow-[0_10px_25px_rgba(0,0,0,0.1)] hover:-translate-y-1 transition-all">
+                      Kumpulkan PPT
+                    </Link>
+                  )}
+                </div>
+              </div>
+            </div>
+          ) : showFullpaper ? (
             <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-[2rem] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.15)] hover:-translate-y-2 hover:bg-white/15 hover:border-green-400/50 hover:shadow-[0_30px_60px_rgba(74,222,128,0.2)] transition-all duration-300 relative overflow-hidden group">
               <div className="absolute inset-0 bg-gradient-to-br from-green-400/10 to-emerald-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <div className="flex flex-col sm:flex-row items-start gap-6 relative z-10">
@@ -66,7 +99,7 @@ export default function DashboardPage() {
                 <div>
                   <h3 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-amber-300 mb-3 drop-shadow-sm pb-1">Selamat, Anda Lolos ke Tahap Berikutnya!</h3>
                   <p className="text-white/80 text-base font-medium leading-relaxed mb-6">
-                    Berdasarkan hasil penilaian, tim Anda dinyatakan berhak untuk melanjutkan ke tahap Fullpaper/Grand Final. Silakan baca panduan penulisan di *guidebook* dan kumpulkan sebelum tenggat waktu.
+                    Berdasarkan hasil penilaian Abstrak, tim Anda dinyatakan berhak untuk melanjutkan ke tahap Fullpaper. Silakan baca panduan penulisan dan kumpulkan sebelum tenggat waktu.
                   </p>
                   {user?.category !== "poster" && (
                     <Link href="/dashboard/fullpaper" className="inline-block bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/30 text-white text-base font-bold py-3.5 px-8 rounded-[1.2rem] shadow-[0_10px_25px_rgba(0,0,0,0.1)] hover:-translate-y-1 transition-all">
@@ -86,7 +119,7 @@ export default function DashboardPage() {
                 <div>
                   <h3 className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 to-blue-200 mb-2 drop-shadow-sm pb-1">Menunggu Pengumuman</h3>
                   <p className="text-white/80 text-base font-medium leading-relaxed">
-                    Saat ini kami masih berada pada tahap pengumpulan karya atau penjurian. Pengumuman finalis akan dilakukan pada tanggal 30 September 2026. Pantau terus dashboard ini!
+                    Saat ini kami masih berada pada tahap pengumpulan karya atau penjurian. Pantau terus dashboard ini untuk informasi selanjutnya!
                   </p>
                 </div>
               </div>
@@ -122,41 +155,44 @@ export default function DashboardPage() {
                 <Calendar size={28} />
               </div>
               <div>
-                <p className="text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-200 to-orange-400 drop-shadow-sm">Pengumpulan Karya</p>
-                <p className="text-sm text-orange-200 font-bold mt-1">1 - 14 September 2026</p>
+                <p className="text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-200 to-orange-400 drop-shadow-sm">Pengumpulan Abstrak</p>
+                <p className="text-sm text-orange-200 font-bold mt-1">21 Juli - 11 Agustus 2026</p>
               </div>
             </div>
             
             <div className="h-px bg-white/20 w-full my-6"></div>
             
             <div className="flex gap-5 items-center group">
-              <div className="w-14 h-14 bg-white/20 backdrop-blur-md border border-white/30 text-purple-300 rounded-[1.2rem] flex items-center justify-center shadow-inner group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+              <div className="w-14 h-14 bg-white/20 backdrop-blur-md border border-white/30 text-green-300 rounded-[1.2rem] flex items-center justify-center shadow-inner group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
                 <Calendar size={28} />
               </div>
               <div>
-                <p className="text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-200 to-purple-400 drop-shadow-sm">Pengumuman Finalis</p>
-                <p className="text-sm text-purple-200 font-bold mt-1">30 September 2026</p>
+                <p className="text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-green-200 to-green-400 drop-shadow-sm">Pengumpulan Fullpaper</p>
+                <p className="text-sm text-green-200 font-bold mt-1">12 Agustus - 8 September 2026</p>
               </div>
             </div>
 
             <div className="h-px bg-white/20 w-full my-6"></div>
             
-            <div className="flex gap-5 items-center opacity-60 group hover:opacity-100 transition-all duration-500">
-              <div className="w-14 h-14 bg-white/10 backdrop-blur-md border border-white/20 text-white/50 rounded-[1.2rem] flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-300">
+            <div className="flex gap-5 items-center group">
+              <div className="w-14 h-14 bg-white/20 backdrop-blur-md border border-white/30 text-purple-300 rounded-[1.2rem] flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-300">
                 <Calendar size={28} />
               </div>
               <div>
-                <p className="text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-white/80 to-white/60 drop-shadow-sm">Grand Final</p>
-                <p className="text-sm text-white/50 font-bold mt-1">15 Oktober 2026</p>
+                <p className="text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-200 to-purple-400 drop-shadow-sm">Pengumpulan PPT / Final</p>
+                <p className="text-sm text-purple-200 font-bold mt-1">17 - 25 September 2026</p>
               </div>
             </div>
             
             <button 
               onClick={() => { 
-                if (localStorage.getItem("debug_time_bypass") === "true") {
-                  localStorage.removeItem("debug_time_bypass");
+                const current = localStorage.getItem("debug_time_bypass");
+                if (!current || current === "0") {
+                  localStorage.setItem("debug_time_bypass", "1"); // Fullpaper
+                } else if (current === "1") {
+                  localStorage.setItem("debug_time_bypass", "2"); // Final / PPT
                 } else {
-                  localStorage.setItem("debug_time_bypass", "true"); 
+                  localStorage.setItem("debug_time_bypass", "0"); // Reset
                 }
                 window.location.reload(); 
               }}

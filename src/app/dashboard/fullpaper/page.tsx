@@ -34,13 +34,13 @@ export default function FullpaperPage() {
       setUser(JSON.parse(session));
     }
 
-    const isDebug = localStorage.getItem("debug_time_bypass") === "true";
+    const debugLevel = localStorage.getItem("debug_time_bypass");
     const now = new Date();
-    // Fullpaper Timeline: 30 Sept - 14 Oct 2026
-    const start = new Date("2026-09-30T00:00:00");
-    const end = new Date("2026-10-14T23:59:59");
+    // Fullpaper Timeline: 12 Aug - 8 Sept 2026
+    const start = new Date("2026-08-12T00:00:00");
+    const end = new Date("2026-09-08T23:59:59");
     
-    if (!isDebug && (now < start || now > end)) {
+    if (debugLevel !== "1" && debugLevel !== "2" && (now < start || now > end)) {
       setIsLocked(true);
     }
   }, []);
@@ -60,7 +60,7 @@ export default function FullpaperPage() {
         </div>
         <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-amber-300 mb-4 drop-shadow-md pb-1">Pengumpulan Fullpaper Dikunci</h1>
         <p className="text-white/80 max-w-lg text-lg leading-relaxed font-medium drop-shadow-sm">
-          Pengumpulan Fullpaper hanya dapat dilakukan setelah pengumuman Finalis (mulai <strong className="text-white">30 September - 14 Oktober 2026</strong>).
+          Pengumpulan Fullpaper hanya dapat dilakukan setelah pengumuman Abstrak (mulai <strong className="text-white">12 Agustus - 8 September 2026</strong>).
         </p>
       </div>
     );

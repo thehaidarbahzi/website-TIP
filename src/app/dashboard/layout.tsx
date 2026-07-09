@@ -7,7 +7,8 @@ import { Home, Users, FileText, Image as ImageIcon, FilePlus, LogOut } from "luc
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<any>(null);
-  const [showFinalist, setShowFinalist] = useState(false);
+  const [showFullpaper, setShowFullpaper] = useState(false);
+  const [showFinal, setShowFinal] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -22,13 +23,25 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       setUser(JSON.parse(session));
     }
     
-    // Check timeline for fullpaper
-    const isDebug = localStorage.getItem("debug_time_bypass") === "true";
+    // Check timeline for fullpaper and PPT
+    const debugLevel = localStorage.getItem("debug_time_bypass");
     const now = new Date();
-    const announcementDate = new Date("2026-09-30T00:00:00");
-    if (isDebug || now >= announcementDate) {
-      setShowFinalist(true);
+    const abstrakAnnounceDate = new Date("2026-08-12T00:00:00");
+    const fullpaperAnnounceDate = new Date("2026-09-17T00:00:00");
+
+    let isFullpaper = now >= abstrakAnnounceDate;
+    let isFinal = now >= fullpaperAnnounceDate;
+
+    if (debugLevel === "1") {
+      isFullpaper = true;
+      isFinal = false;
+    } else if (debugLevel === "2") {
+      isFullpaper = true;
+      isFinal = true;
     }
+
+    setShowFullpaper(isFullpaper);
+    setShowFinal(isFinal);
   }, [router]);
 
   const handleLogout = () => {
@@ -87,10 +100,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <FileText size={22} />
                 Abstrak
               </Link>
-              {showFinalist && (
+              {showFullpaper && (
                 <Link href="/dashboard/fullpaper" className={`flex items-center gap-4 px-5 py-3.5 transition-all duration-300 rounded-[1.2rem] font-bold ${isActive("/dashboard/fullpaper") ? "bg-gradient-to-r from-white/20 to-white/10 text-yellow-300 border border-white/30 shadow-inner" : "text-white/70 hover:bg-white/10 hover:text-white"}`}>
                   <FilePlus size={22} />
                   Fullpaper
+                </Link>
+              )}
+              {showFinal && (
+                <Link href="/dashboard/ppt" className={`flex items-center gap-4 px-5 py-3.5 transition-all duration-300 rounded-[1.2rem] font-bold ${isActive("/dashboard/ppt") ? "bg-gradient-to-r from-white/20 to-white/10 text-yellow-300 border border-white/30 shadow-inner" : "text-white/70 hover:bg-white/10 hover:text-white"}`}>
+                  <ImageIcon size={22} />
+                  PPT
                 </Link>
               )}
             </>
