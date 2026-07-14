@@ -1,23 +1,51 @@
-import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";
+import { jwtVerify } from "jose";
 
-export async function proxy(req: NextRequest) {
-  // Disable NextAuth check because the app uses localStorage for authentication
-  // const isLoggedIn = await auth();
-  // const pathname = req.nextUrl.pathname;
-  // const authPages = ["/login"];
+const secretKey = process.env.SESSION_SECRET;
+const encodedKey = new TextEncoder().encode(secretKey);
 
-  // if (!isLoggedIn && pathname.startsWith("/dashboard")) {
-  //   return NextResponse.redirect(new URL("/login", req.url));
-  // }
+async function getSessionPayload(request: NextRequest) {
+  const cookie = request.cookies.get("session");
+  if (!cookie) return null;
+  try {
+    const { payload } = await jwtVerify(cookie.value, encodedKey, {
+      algorithms: ["HS256"],
+    });
+    return payload;
+  } catch {
+    return null;
+  }
+}
 
-  // if (isLoggedIn && authPages.includes(pathname)) {
-  //   return NextResponse.redirect(new URL("/dashboard", req.url));
-  // }
+export async function proxy(request: NextRequest) {
+  try {
+    const { pathname } = request.nextUrl;
 
-  return NextResponse.next();
+    if (pathname === "/login" || pathname === "/pendaftaran") {
+      const payload = await getSessionPayload(request);
+      if (payload && typeof payload.user_role === "string") {
+        return NextResponse.redirect(new URL("/dashboard", request.url));
+      }
+      return NextResponse.next();
+    }
+
+    if (!pathname.startsWith("/dashboard")) {
+      return NextResponse.next();
+    }
+
+    const payload = await getSessionPayload(request);
+
+    if (!payload || typeof payload.user_role !== "string") {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+
+    return NextResponse.next();
+  } catch (err) {
+    console.error("[PROXY ERROR]", err);
+    return NextResponse.next();
+  }
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login"],
+  matcher: ["/dashboard/:path*", "/login", "/pendaftaran"],
 };

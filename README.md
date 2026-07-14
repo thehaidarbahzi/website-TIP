@@ -1,3 +1,9 @@
 # Webisite Tech Innovation Paper
 
-Dalam pengembangan
+## Docs untuk developer
+
+Struktur Project
+
+```
+eeeeeeeee
+```
