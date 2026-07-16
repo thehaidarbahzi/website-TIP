@@ -15,8 +15,10 @@ import {
 import Link from "next/link";
 import { useEventTimeline } from "@/app/(utils)/hooks/useEventTimeline";
 
-function formatMs(ms: number): string {
+function formatMs(ms?: number | string): string {
+  if (!ms && ms !== 0) return "";
   const d = new Date(ms);
+  if (Number.isNaN(d.getTime())) return String(ms);
   const day = d.getDate();
   const months = [
     "Januari", "Februari", "Maret", "April", "Mei", "Juni",
@@ -25,9 +27,9 @@ function formatMs(ms: number): string {
   return `${day} ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
 
-function formatDateRange(start?: number, end?: number): string {
-  if (!start) return "";
-  if (!end) return formatMs(start);
+function formatDateRange(start?: number | string, end?: number | string): string {
+  if (!start && start !== 0) return "";
+  if (!end && end !== 0) return formatMs(start);
   return `${formatMs(start)} - ${formatMs(end)}`;
 }
 
@@ -241,10 +243,12 @@ function GuestHome({
       ? localStorage.getItem("debug_time_bypass")
       : null;
 
-  function hasTimePassed(time?: number): boolean {
+  function hasTimePassed(time?: number | string): boolean {
     if (bypass === "1" || bypass === "2") return true;
-    if (!time) return false;
-    return now >= time;
+    if (!time && time !== 0) return false;
+    const target = typeof time === "string" ? new Date(time).getTime() : time;
+    if (!Number.isFinite(target)) return false;
+    return now >= target;
   }
 
   const abstrakAnnounce = cat?.pengumuman_abstrak?.time;

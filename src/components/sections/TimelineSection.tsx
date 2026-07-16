@@ -127,6 +127,15 @@ const TIME_ONLY_FORMATTER = new Intl.DateTimeFormat("id-ID", {
   minute: "2-digit",
 });
 
+const MOBILE_DATE_FORMATTER = new Intl.DateTimeFormat(
+  "id-ID",
+  {
+    timeZone: "Asia/Jakarta",
+    day: "numeric",
+    month: "short",
+  },
+);
+
 function formatTimestamp(value: number): string {
   return TIMESTAMP_FORMATTER.format(new Date(value));
 }
@@ -162,6 +171,37 @@ function formatTimelineTooltip(item: TimelineItem): string | null {
 
   return null;
 }
+
+function formatTimelineDateShort(
+  item: TimelineItem,
+): string | null {
+  if (
+    item.startValue !== undefined &&
+    item.endValue !== undefined
+  ) {
+    const startText = MOBILE_DATE_FORMATTER.format(
+      new Date(item.startValue),
+    );
+
+    const endText = MOBILE_DATE_FORMATTER.format(
+      new Date(item.endValue),
+    );
+
+    return `${startText} – ${endText}`;
+  }
+
+  const timestamp =
+    item.timeValue ?? item.startValue;
+
+  if (timestamp === undefined) {
+    return null;
+  }
+
+  return MOBILE_DATE_FORMATTER.format(
+    new Date(timestamp),
+  );
+}
+
 
 function getRemainingTime(targetDate: string | null) {
   if (!targetDate) {
@@ -678,6 +718,9 @@ export default function TimelineSection() {
                 const tooltipText =
                   formatTimelineTooltip(item);
 
+                const mobileDateText =
+                  formatTimelineDateShort(item);
+
                 return (
                   <li
                     key={item.id}
@@ -702,25 +745,32 @@ export default function TimelineSection() {
                       aria-hidden="true"
                     />
 
-                    <span className="timeline-section__timeline-label">
-                      {item.label}
-                    </span>
-
-                    {tooltipText && (
-                      <span
-                        className="timeline-section__timeline-tooltip"
-                        role="tooltip"
-                      >
-                        <span className="timeline-section__timeline-tooltip-label">
-                          {item.hasRange
-                            ? "Periode"
-                            : "Waktu"}
-                        </span>
-                        <span className="timeline-section__timeline-tooltip-time">
-                          {tooltipText}
-                        </span>
+                    <div className="timeline-section__timeline-copy">
+                      <span className="timeline-section__timeline-label">
+                        {item.label}
                       </span>
-                    )}
+
+                      {tooltipText && (
+                        <span
+                          className="timeline-section__timeline-tooltip"
+                          role="tooltip"
+                        >
+                          <span className="timeline-section__timeline-tooltip-label">
+                            {item.hasRange
+                              ? "Periode"
+                              : "Waktu"}
+                          </span>
+
+                          <span className="timeline-section__timeline-tooltip-time timeline-section__timeline-tooltip-time--desktop">
+                            {tooltipText}
+                          </span>
+
+                          <span className="timeline-section__timeline-tooltip-time timeline-section__timeline-tooltip-time--mobile">
+                            {mobileDateText}
+                          </span>
+                        </span>
+                      )}
+                    </div>
 
                     {item.active && (
                       <span className="sr-only">

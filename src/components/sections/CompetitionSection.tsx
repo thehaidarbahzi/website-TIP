@@ -43,8 +43,11 @@ export default function CompetitionSection() {
   }, []);
 
   return (
-    <section id="competition" className="panel items-center justify-center">
-      <div className="max-w-6xl mx-auto px-6 w-full flex flex-col justify-center h-full pt-100">
+    <section
+      id="competition"
+      className="panel items-center justify-center max-sm:min-h-[auto]"
+    >
+      <div className="max-w-6xl mx-auto px-6 w-full flex flex-col justify-center h-full pt-8 md:pt-96">
         <div ref={headerRef} className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
             Kategori Kompetisi

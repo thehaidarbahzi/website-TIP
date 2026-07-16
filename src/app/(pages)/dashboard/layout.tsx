@@ -15,6 +15,7 @@ import {
   Star,
   ClipboardList,
   UserCog,
+  CalendarClock,
 } from "lucide-react";
 import { logoutUser } from "@/app/lib/action/auth";
 
@@ -195,6 +196,12 @@ export default function DashboardLayout({
                 pathname={pathname}
                 icon={<UserCog size={22} />}
                 label="Users"
+              />
+              <NavLink
+                href="/dashboard/timeline"
+                pathname={pathname}
+                icon={<CalendarClock size={22} />}
+                label="Timeline"
               />
             </>
           )}

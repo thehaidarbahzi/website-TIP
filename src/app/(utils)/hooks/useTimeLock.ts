@@ -34,10 +34,21 @@ export function useTimeLock(
 
     const now = Date.now();
 
-    if (stage.start !== undefined && stage.end !== undefined) {
-      setIsLocked(now < stage.start || now > stage.end);
-    } else if (stage.time !== undefined) {
-      setIsLocked(now < stage.time);
+    const toMs = (value?: number | string): number | undefined => {
+      if (value === undefined || value === null || value === "") return undefined;
+      if (typeof value === "number") return value;
+      const parsed = new Date(value).getTime();
+      return Number.isFinite(parsed) ? parsed : undefined;
+    };
+
+    const startMs = toMs(stage.start);
+    const endMs = toMs(stage.end);
+    const timeMs = toMs(stage.time);
+
+    if (startMs !== undefined && endMs !== undefined) {
+      setIsLocked(now < startMs || now > endMs);
+    } else if (timeMs !== undefined) {
+      setIsLocked(now < timeMs);
     } else {
       setIsLocked(true);
     }

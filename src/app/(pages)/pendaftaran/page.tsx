@@ -66,11 +66,21 @@ export default function RegistrationPage() {
         continue;
       }
       const now = Date.now();
+      const toMs = (value?: number | string): number | undefined => {
+        if (value === undefined || value === null || value === "") return undefined;
+        if (typeof value === "number") return value;
+        const parsed = new Date(value).getTime();
+        return Number.isFinite(parsed) ? parsed : undefined;
+      };
       if (pendaftaran.start && pendaftaran.end) {
-        if (now < pendaftaran.start || now > pendaftaran.end) {
-          locked = true;
-          if (!dateStr && pendaftaran.start && pendaftaran.end) {
-            dateStr = `${formatMs(pendaftaran.start)} hingga ${formatMs(pendaftaran.end)}`;
+        const startMs = toMs(pendaftaran.start);
+        const endMs = toMs(pendaftaran.end);
+        if (startMs !== undefined && endMs !== undefined) {
+          if (now < startMs || now > endMs) {
+            locked = true;
+            if (!dateStr) {
+              dateStr = `${formatMs(startMs)} hingga ${formatMs(endMs)}`;
+            }
           }
         }
       }

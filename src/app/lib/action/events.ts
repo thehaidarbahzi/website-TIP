@@ -1,12 +1,22 @@
 "use server";
 
 import { getFirebaseAdminDb } from "../server/firebase";
+import { getSession } from "../server/auth/sessions";
 import type { EventTimeline, EventCategory, EventStage } from "@/app/(utils)/types/event";
+
+async function requireAdmin() {
+  const cookie = await getSession();
+  if (!cookie) throw new Error("Unauthorized");
+  const { decrypt } = await import("../server/auth/sessions");
+  const session = await decrypt(cookie.value);
+  if (!session || session.user_role !== "admin") throw new Error("Forbidden");
+  return session;
+}
 
 export async function getEventTimeline(): Promise<EventTimeline> {
   const db = getFirebaseAdminDb();
   const snapshot = await db.ref("event").once("value");
-  const data = snapshot.val() as Record<string, Record<string, any>> | null;
+  const data = snapshot.val() as Record<string, Record<string, EventStage>> | null;
 
   if (!data) return {};
 
@@ -44,19 +54,31 @@ export async function getCurrentStage(
 
   const now = Date.now();
 
+  const toMs = (value?: number | string): number | undefined => {
+    if (value === undefined || value === null || value === "") return undefined;
+    if (typeof value === "number") return value;
+    const parsed = new Date(value).getTime();
+    return Number.isFinite(parsed) ? parsed : undefined;
+  };
+
   const isInRange = (stage: EventStage): boolean => {
-    if (stage.start !== undefined && stage.end !== undefined) {
-      return now >= stage.start && now <= stage.end;
+    const start = toMs(stage.start);
+    const end = toMs(stage.end);
+    if (start !== undefined && end !== undefined) {
+      return now >= start && now <= end;
     }
-    if (stage.time !== undefined) {
-      return now >= stage.time;
+    const time = toMs(stage.time);
+    if (time !== undefined) {
+      return now >= time;
     }
     return false;
   };
 
   const hasPassed = (stage: EventStage): boolean => {
-    if (stage.end !== undefined) return now > stage.end;
-    if (stage.time !== undefined) return now > stage.time;
+    const end = toMs(stage.end);
+    if (end !== undefined) return now > end;
+    const time = toMs(stage.time);
+    if (time !== undefined) return now > time;
     return false;
   };
 
@@ -109,4 +131,79 @@ export async function getCurrentStage(
   }
 
   return "administrasi";
+}
+
+export async function updateEventTimeline(
+  timeline: EventTimeline,
+): Promise<{ ok: true }> {
+  await requireAdmin();
+
+  const db = getFirebaseAdminDb();
+
+  const payload: Record<string, Record<string, Partial<EventStage>>> = {};
+  for (const [category, stages] of Object.entries(timeline)) {
+    if (!["lkti", "essay", "poster"].includes(category)) continue;
+    const cat: Record<string, Partial<EventStage>> = {};
+    const catStages = stages as EventCategory;
+    for (const [stageKey, stageData] of Object.entries(catStages)) {
+      const stage: EventStage = stageData as EventStage;
+      const obj: Partial<EventStage> = {};
+      if (stage.label !== undefined) obj.label = stage.label;
+      if (stage.order !== undefined) obj.order = stage.order;
+      if (stage.start !== undefined) obj.start = stage.start;
+      if (stage.end !== undefined) obj.end = stage.end;
+      if (stage.time !== undefined) obj.time = stage.time;
+      if (stage.startsAt !== undefined) obj.startsAt = stage.startsAt;
+      if (stage.endsAt !== undefined) obj.endsAt = stage.endsAt;
+      if (stage.countdownTitle !== undefined)
+        obj.countdownTitle = stage.countdownTitle;
+      cat[stageKey] = obj;
+    }
+    payload[category] = cat;
+  }
+
+  await db.ref("event").set(payload);
+  return { ok: true };
+}
+
+export async function deleteStage(
+  category: string,
+  stageKey: string,
+): Promise<{ ok: true }> {
+  await requireAdmin();
+
+  if (!["lkti", "essay", "poster"].includes(category)) {
+    throw new Error("Kategori tidak valid.");
+  }
+
+  const db = getFirebaseAdminDb();
+  await db.ref(`event/${category}/${stageKey}`).remove();
+  return { ok: true };
+}
+
+export async function addStage(
+  category: string,
+  stageKey: string,
+  stage: EventStage,
+): Promise<{ ok: true }> {
+  await requireAdmin();
+
+  if (!["lkti", "essay", "poster"].includes(category)) {
+    throw new Error("Kategori tidak valid.");
+  }
+
+  const db = getFirebaseAdminDb();
+  const obj: Partial<EventStage> = {};
+  if (stage.label !== undefined) obj.label = stage.label;
+  if (stage.order !== undefined) obj.order = stage.order;
+  if (stage.start !== undefined) obj.start = stage.start;
+  if (stage.end !== undefined) obj.end = stage.end;
+  if (stage.time !== undefined) obj.time = stage.time;
+  if (stage.startsAt !== undefined) obj.startsAt = stage.startsAt;
+  if (stage.endsAt !== undefined) obj.endsAt = stage.endsAt;
+  if (stage.countdownTitle !== undefined)
+    obj.countdownTitle = stage.countdownTitle;
+
+  await db.ref(`event/${category}/${stageKey}`).set(obj);
+  return { ok: true };
 }
