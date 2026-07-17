@@ -101,11 +101,12 @@ export async function getAllTeams() {
   await requireAdmin();
 
   const db = getFirebaseAdminDb();
+  if (!db) return []; // Fallback for when DB is mocked and returns null. Note that my db mock doesn't actually return null, but just in case.
   const snapshot = await db.ref("peserta").once("value");
-  const data = snapshot.val() as Record<string, Record<string, unknown>> | null;
+  const data = snapshot.val() as Record<string, any> | null;
   if (!data) return [];
   return Object.entries(data).map(([teamName, team]) => ({
     teamName,
-    ...team,
-  }));
+    ...(team as Record<string, any>),
+  })) as Array<{ teamName: string; status?: string; category?: string; [key: string]: any }>;
 }

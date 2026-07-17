@@ -9,6 +9,7 @@ export async function submitFullpaper(data: {
   title: string;
   file?: { fileName: string; fileSize: number; fileId: string; webViewLink: string; fileType: string };
   orisinalitas?: { fileName: string; fileSize: number; fileId: string; webViewLink: string; fileType: string };
+  buktiPembayaran?: { fileName: string; fileSize: number; fileId: string; webViewLink: string; fileType: string };
 }) {
   const sessionCookie = await getSession();
   if (!sessionCookie) return { ok: false, error: "Unauthorized" };
@@ -29,6 +30,7 @@ export async function submitFullpaper(data: {
     title: data.title,
     file: data.file || null,
     orisinalitas: data.orisinalitas || null,
+    buktiPembayaran: data.buktiPembayaran || null,
     submittedAt: new Date().toISOString(),
     status: "submitted",
   });
@@ -40,6 +42,9 @@ export async function submitPoster(data: {
   subtema: string;
   title: string;
   file?: { fileName: string; fileSize: number; fileId: string; webViewLink: string; fileType: string };
+  biodata?: { fileName: string; fileSize: number; fileId: string; webViewLink: string; fileType: string };
+  orisinalitas?: { fileName: string; fileSize: number; fileId: string; webViewLink: string; fileType: string };
+  buktiPembayaran?: { fileName: string; fileSize: number; fileId: string; webViewLink: string; fileType: string };
 }) {
   const sessionCookie = await getSession();
   if (!sessionCookie) return { ok: false, error: "Unauthorized" };
@@ -59,6 +64,9 @@ export async function submitPoster(data: {
     subtema: data.subtema,
     title: data.title,
     file: data.file || null,
+    biodata: data.biodata || null,
+    orisinalitas: data.orisinalitas || null,
+    buktiPembayaran: data.buktiPembayaran || null,
     submittedAt: new Date().toISOString(),
     status: "submitted",
   });

@@ -1,0 +1,417 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+
+:root {
+  --faq-orange: #ffad27;
+  --faq-yellow: #f6ad00;
+  --faq-red: #ff5028;
+  --faq-text: #292929;
+  --faq-white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.faq-section {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  min-height: 600px;
+  padding: 25px 24px 48px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.faq-container {
+  width: min(1370px, 100%);
+  margin: 0 auto;
+}
+
+/* ===============================
+   HEADER
+================================ */
+
+.faq-header {
+  text-align: center;
+}
+
+.faq-badge {
+  display: inline-block;
+  padding: 9px;
+  border: 1px solid #ffd16d;
+  border-radius: 17px;
+  background-color: rgba(255, 255, 255, 0.96);
+  box-shadow:
+    0 3px 0 rgba(246, 173, 0, 0.15),
+    0 8px 19px rgba(40, 40, 40, 0.07);
+  transform: rotate(-1.5deg);
+}
+
+.faq-badge__dashed {
+  position: relative;
+  display: flex;
+  min-width: 188px;
+  min-height: 67px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  border-radius: 13px;
+  color: #353535;
+  font-size: 21px;
+  font-weight: 800;
+  transform: rotate(1.5deg);
+}
+
+/* Border putus-putus badge */
+.faq-badge__dashed::before {
+  position: absolute;
+  inset: 0;
+  padding: 3px;
+  border-radius: inherit;
+  content: "";
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      var(--faq-yellow) 0 22px,
+      transparent 22px 34px
+    )
+    top / 100% 3px no-repeat,
+
+    repeating-linear-gradient(
+      90deg,
+      var(--faq-yellow) 0 22px,
+      transparent 22px 34px
+    )
+    bottom / 100% 3px no-repeat,
+
+    repeating-linear-gradient(
+      0deg,
+      var(--faq-yellow) 0 22px,
+      transparent 22px 34px
+    )
+    left / 3px 100% no-repeat,
+
+    repeating-linear-gradient(
+      0deg,
+      var(--faq-yellow) 0 22px,
+      transparent 22px 34px
+    )
+    right / 3px 100% no-repeat;
+}
+
+.faq-title {
+  margin: 15px 0 0;
+  color: var(--faq-text);
+  font-size: clamp(34px, 3.25vw, 46px);
+  font-weight: 800;
+  letter-spacing: -2.2px;
+  line-height: 1.15;
+}
+
+/* ===============================
+   SHOWCASE EMPAT PERTANYAAN
+================================ */
+
+.faq-showcase {
+  display: grid;
+  grid-template-columns:
+    minmax(330px, 1fr)
+    minmax(250px, 330px)
+    minmax(330px, 1fr);
+  align-items: center;
+  gap: 45px;
+  margin-top: 88px;
+}
+
+.faq-showcase__column {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/*
+ * Ruang tengah sengaja kosong.
+ * Nanti bisa diisi <img> maskot.
+ */
+.faq-showcase__center {
+  min-height: 210px;
+}
+
+/* ===============================
+   QUESTION CARD
+================================ */
+
+.faq-card {
+  position: relative;
+  width: 100%;
+  padding: 9px;
+  border: 1px solid #ffb83d;
+  border-radius: 17px;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow:
+    0 8px 0 rgba(45, 45, 45, 0.055),
+    0 12px 20px rgba(45, 45, 45, 0.08);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.faq-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 9px 0 rgba(255, 173, 39, 0.12),
+    0 17px 28px rgba(45, 45, 45, 0.12);
+}
+
+.faq-card__dashed-border {
+  position: relative;
+  display: flex;
+  min-height: 61px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 26px;
+  border-radius: 12px;
+}
+
+/*
+ * Garis putus-putus custom.
+ * Lebih mirip referensi dibanding border: 2px dashed.
+ */
+.faq-card__dashed-border::before {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  content: "";
+  pointer-events: none;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      var(--faq-red) 0 31px,
+      transparent 31px 45px
+    )
+    top / 100% 2px no-repeat,
+
+    repeating-linear-gradient(
+      90deg,
+      var(--faq-red) 0 31px,
+      transparent 31px 45px
+    )
+    bottom / 100% 2px no-repeat,
+
+    repeating-linear-gradient(
+      0deg,
+      var(--faq-red) 0 22px,
+      transparent 22px 34px
+    )
+    left / 2px 100% no-repeat,
+
+    repeating-linear-gradient(
+      0deg,
+      var(--faq-red) 0 22px,
+      transparent 22px 34px
+    )
+    right / 2px 100% no-repeat;
+}
+
+/* Menutup ujung gradient agar sudut terlihat membulat */
+.faq-card__dashed-border::after {
+  position: absolute;
+  inset: 1px;
+  border-radius: 11px;
+  content: "";
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+.faq-card__dashed-border p {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  color: #141414;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.45;
+  text-align: center;
+}
+
+/* ===============================
+   GRID SAAT LIHAT SEMUA
+=============================== */
+
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 28px;
+  margin-top: 55px;
+}
+
+/* ===============================
+   BUTTON
+================================ */
+
+.faq-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 39px;
+}
+
+.faq-button {
+  display: inline-flex;
+  width: 235px;
+  min-height: 55px;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  padding: 12px 24px;
+  border: 0;
+  border-radius: 11px;
+  background-color: var(--faq-orange);
+  color: #242424;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 8px 16px rgba(255, 173, 39, 0.18);
+  transition:
+    background-color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.faq-button:hover {
+  background-color: #ffb642;
+  box-shadow: 0 11px 21px rgba(255, 173, 39, 0.27);
+  transform: translateY(-3px);
+}
+
+.faq-button:active {
+  transform: translateY(0);
+}
+
+.faq-button:focus-visible {
+  outline: 3px solid rgba(255, 80, 40, 0.28);
+  outline-offset: 4px;
+}
+
+.faq-button__icon {
+  width: 19px;
+  height: 19px;
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 1100px) {
+  .faq-showcase {
+    grid-template-columns:
+      minmax(275px, 1fr)
+      150px
+      minmax(275px, 1fr);
+    gap: 24px;
+  }
+
+  .faq-showcase__center {
+    min-height: 160px;
+  }
+
+  .faq-card__dashed-border p {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 800px) {
+  .faq-section {
+    min-height: auto;
+    padding: 34px 20px 44px;
+  }
+
+  .faq-title {
+    margin-top: 20px;
+    font-size: 35px;
+    letter-spacing: -1.5px;
+  }
+
+  /*
+   * Di tablet tidak memakai ruang tengah,
+   * karena belum ada maskot.
+   */
+  .faq-showcase {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 48px;
+  }
+
+  .faq-showcase__center {
+    display: none;
+  }
+
+  .faq-grid {
+    gap: 18px;
+  }
+}
+
+@media (max-width: 600px) {
+  .faq-section {
+    padding-inline: 15px;
+  }
+
+  .faq-badge {
+    padding: 7px;
+  }
+
+  .faq-badge__dashed {
+    min-width: 160px;
+    min-height: 55px;
+    font-size: 17px;
+  }
+
+  .faq-title {
+    font-size: 30px;
+    line-height: 1.25;
+  }
+
+  .faq-showcase,
+  .faq-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin-top: 35px;
+  }
+
+  .faq-showcase__column {
+    gap: 15px;
+  }
+
+  .faq-card {
+    padding: 8px;
+    border-radius: 15px;
+  }
+
+  .faq-card__dashed-border {
+    min-height: 68px;
+    padding: 14px 21px;
+  }
+
+  .faq-card__dashed-border p {
+    font-size: 14px;
+  }
+
+  .faq-actions {
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  .faq-button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-card,
+  .faq-button {
+    transition: none;
+  }
+}

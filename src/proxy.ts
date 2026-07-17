@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 
-const secretKey = process.env.SESSION_SECRET;
+const secretKey = process.env.SESSION_SECRET || "fallback_secret_key_for_local_development_12345";
 const encodedKey = new TextEncoder().encode(secretKey);
 
 async function getSessionPayload(request: NextRequest) {

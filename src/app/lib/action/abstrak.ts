@@ -16,6 +16,7 @@ export async function submitAbstrak(data: {
   subtema: string;
   title: string;
   file?: FileMeta;
+  biodata?: FileMeta;
 }) {
   const sessionCookie = await getSession();
   if (!sessionCookie) return { ok: false, error: "Unauthorized" };
@@ -35,6 +36,7 @@ export async function submitAbstrak(data: {
     subtema: data.subtema,
     title: data.title,
     file: data.file || null,
+    biodata: data.biodata || null,
     submittedAt: new Date().toISOString(),
     status: "submitted",
   });

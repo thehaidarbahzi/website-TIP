@@ -1,136 +1,302 @@
 "use client";
 
-import { useRef, useEffect } from "react";
-import Image from "next/image";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGsapAnimation } from "../../hooks/useGsapAnimation";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import styles from "./AboutUs.module.css";
 
-gsap.registerPlugin(ScrollTrigger);
+const logoLPKTA = "/cropped-LOGO-LPKTA-1.png";
+const logoCT = "/logo CT fIX DAN rESMI 1.png";
+
+const frames = [
+  {
+    id: "empty",
+    type: "empty" as const,
+  },
+  {
+    id: "opening",
+    type: "opening" as const,
+  },
+  {
+    id: "lpkta",
+    type: "organization" as const,
+    title: "LPKTA FT UGM",
+    logo: logoLPKTA,
+    logoAlt: "Logo LPKTA FT UGM",
+    description:
+      "LPKTA FT UGM merupakan Badan Semi Otonom Fakultas Teknik Universitas Gadjah Mada yang bergerak dalam bidang penelitian, kajian ilmiah, dan penerapan teknologi kepada masyarakat. Kami menjadi ruang kolaborasi bagi mahasiswa untuk mengembangkan kemampuan riset, berpikir kritis, publikasi ilmiah, dan inovasi teknologi. Dengan semangat Technology for Humanity, kami berkomitmen menghadirkan ilmu pengetahuan dan teknologi yang bermanfaat bagi bangsa dan negara.",
+  },
+  {
+    id: "cendekia-teknika",
+    type: "organization" as const,
+    title: "Cendekia Teknika",
+    logo: logoCT,
+    logoAlt: "Logo Cendekia Teknika",
+    description:
+      "Cendekia Teknika Universitas Gadjah Mada (CT UGM) merupakan Badan Semi Otonom Fakultas Teknik UGM yang bergerak di bidang akademik dan keprofesian teknik. CT UGM menjadi ruang bagi mahasiswa untuk mengembangkan kompetensi, karakter, wawasan, dan jejaring melalui seminar, workshop, kompetisi, serta berbagai program pengembangan minat dan bakat.",
+  },
+];
+
+const frameAnimation = {
+  initial: {
+    opacity: 0,
+    scale: 1.35,
+    filter: "blur(22px)",
+  },
+  animate: {
+    opacity: 1,
+    scale: 1,
+    filter: "blur(0px)",
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.55,
+    filter: "blur(22px)",
+  },
+};
 
 export default function AboutUsSection() {
-  const headerRef = useRef<HTMLDivElement>(null);
-  const cardsWrapperRef = useRef<HTMLDivElement>(null);
-  const cendekiaRef = useRef<HTMLDivElement>(null);
-  const lpktaRef = useRef<HTMLDivElement>(null);
-  const footerRef = useRef<HTMLDivElement>(null);
-
-  useGsapAnimation(headerRef.current ?? null, "up", 0.8);
-  useGsapAnimation(footerRef.current ?? null, "fade", 0.6, 0.3);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [activeFrame, setActiveFrame] = useState(0);
 
   useEffect(() => {
-    const wrapper = cardsWrapperRef.current;
-    const cards = [cendekiaRef.current, lpktaRef.current].filter(
-      Boolean,
-    ) as HTMLElement[];
-    if (!wrapper || !cards.length) return;
+    let animationFrameId: number | null = null;
 
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        cards,
-        { opacity: 0, y: 60, scale: 0.95 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.85,
-          stagger: 0.2,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: wrapper,
-            start: "top 82%",
-          },
-        },
+    const updateActiveFrame = () => {
+      if (!sectionRef.current) return;
+
+      const section = sectionRef.current;
+      const sectionTop = section.offsetTop;
+      const scrollableDistance =
+        section.offsetHeight - window.innerHeight;
+
+      if (scrollableDistance <= 0) return;
+
+      const scrollInsideSection = window.scrollY - sectionTop;
+      const progress = Math.min(
+        Math.max(scrollInsideSection / scrollableDistance, 0),
+        1
       );
-    }, wrapper);
 
-    return () => ctx.revert();
+      const nextFrame = Math.min(
+        Math.floor(progress * frames.length),
+        frames.length - 1
+      );
+
+      setActiveFrame((currentFrame) =>
+        currentFrame === nextFrame ? currentFrame : nextFrame
+      );
+    };
+
+    const handleScroll = () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+
+      animationFrameId = requestAnimationFrame(updateActiveFrame);
+    };
+
+    updateActiveFrame();
+
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
+
+    window.addEventListener("resize", updateActiveFrame);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", updateActiveFrame);
+
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
   }, []);
+
+  const currentFrame = frames[activeFrame];
 
   return (
     <section
-      id="about"
-      className="panel items-center justify-center overflow-y-auto"
+      ref={sectionRef}
+      className={styles.aboutUs}
+      aria-label="Tentang penyelenggara Tech Innovation Paper"
     >
-      <div className="max-w-6xl mx-auto px-6 w-full flex flex-col justify-center pt-24 pb-16">
-        <div ref={headerRef} className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
-            Tentang Kami
-          </h2>
-          <p className="text-slate-700 max-w-2xl mx-auto">
-            Tech Innovation Paper (TxC) 2026 diselenggarakan melalui kolaborasi
-            luar biasa.
-          </p>
+      <div className={styles.aboutUsSticky}>
+        <div className={styles.aboutUsBackground}>
+          <svg
+            className={styles.aboutUsSvg}
+            viewBox="0 0 1440 778"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M1459 776.75H-21V752.978V657.039V120.461V96.6887V0.75H461.979H1459V96.6887V120.461V657.039V776.75Z"
+              fill="#FD5102"
+            />
+
+            <path
+              d="M-21 120.461V776.75H1459V120.461M-21 120.461H1459M-21 120.461V96.6887V0.75H461.979H1459V96.6887V120.461M1459 657.039H-21V752.978"
+              stroke="black"
+              strokeWidth="1.5"
+            />
+
+            <rect
+              x="-21.25"
+              y="88.5"
+              width="1479.5"
+              height="657.5"
+              stroke="black"
+              strokeWidth="1.5"
+              strokeDasharray="12 12"
+            />
+          </svg>
         </div>
 
-        <div
-          ref={cardsWrapperRef}
-          className="flex flex-col lg:flex-row gap-12 items-stretch justify-center"
-        >
-          <div
-            ref={cendekiaRef}
-            className="flex flex-col bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white flex-1 relative overflow-hidden"
-          >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--color-brand-purple)] rounded-bl-full opacity-10" />
-            <div className="flex items-center gap-6 mb-6">
-              <div className="relative w-24 h-24 bg-white rounded-full p-2 shadow-md border-2 border-slate-100 flex-shrink-0">
-                <Image
-                  src="/logo CT fIX DAN rESMI 1.png"
-                  alt="Logo Cendekia Teknika"
-                  fill
-                  sizes="96px"
-                  className="object-contain p-2"
-                />
-              </div>
-              <h3 className="text-2xl font-bold text-[var(--color-brand-purple)]">
-                Cendekia Teknika UGM
-              </h3>
-            </div>
-            <p className="text-slate-700 leading-relaxed text-sm flex-grow">
-              Badan Semi Otonom (BSO) di Fakultas Teknik UGM yang berfokus pada
-              ranah Akademik dan Keprofesian Teknik. Kami mewadahi potensi
-              mahasiswa untuk menjadi insan akademis yang profesional,
-              berwawasan luas, dan berkarakter unggul melalui program
-              pengembangan riset, inovasi, dan diskusi ilmiah.
-            </p>
-          </div>
-
-          <div
-            ref={lpktaRef}
-            className="flex flex-col bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white flex-1 relative overflow-hidden"
-          >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--color-brand-orange)] rounded-bl-full opacity-10" />
-            <div className="flex items-center gap-6 mb-6">
-              <div className="relative w-24 h-24 bg-white rounded-full p-2 shadow-md border-2 border-slate-100 flex-shrink-0">
-                <Image
-                  src="/cropped-LOGO-LPKTA-1.png"
-                  alt="Logo LPKTA"
-                  fill
-                  sizes="96px"
-                  className="object-contain p-2"
-                />
-              </div>
-              <h3 className="text-2xl font-bold text-[var(--color-brand-orange-dark)]">
-                LPKTA
-              </h3>
-            </div>
-            <p className="text-slate-700 leading-relaxed text-sm flex-grow">
-              Lembaga Pengembangan Keilmuan dan Teknologi merupakan wadah bagi
-              para mahasiswa untuk mengembangkan minat dan bakat di bidang
-              akademik, riset, dan inovasi teknologi. Berkomitmen untuk terus
-              mendukung lahirnya inovasi-inovasi mutakhir dari generasi muda
-              bangsa.
-            </p>
-          </div>
+        <div className={styles.aboutUsViewport}>
+          <AnimatePresence mode="sync" initial={false}>
+            <motion.div
+              key={currentFrame.id}
+              className={styles.aboutUsFrame}
+              variants={frameAnimation}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={{
+                duration: 0.7,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              {currentFrame.type === "empty" ? (
+                <EmptyFrame />
+              ) : currentFrame.type === "opening" ? (
+                <OpeningFrame />
+              ) : (
+                <OrganizationFrame frame={currentFrame} />
+              )}
+            </motion.div>
+          </AnimatePresence>
         </div>
 
-        <div
-          ref={footerRef}
-          className="mt-16 text-center text-slate-500 text-sm"
-        >
-          <p>&copy; 2026 Tech Innovation Paper. All rights reserved.</p>
+        <div className={styles.aboutUsProgress} aria-hidden="true">
+          {frames.map((frame, index) => (
+            <span
+              key={frame.id}
+              className={`${styles.aboutUsProgressDot} ${
+                index === activeFrame
+                  ? styles.aboutUsProgressDotActive
+                  : ""
+              }`}
+            />
+          ))}
         </div>
       </div>
     </section>
+  );
+}
+
+function EmptyFrame() {
+  return <div className={styles.emptyFrame} />;
+}
+
+function OpeningFrame() {
+  return (
+    <div className={styles.openingFrame}>
+      <motion.h2
+        className={styles.openingFrameTitle}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          duration: 0.65,
+          delay: 0.12,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+      >
+        Tech Innovation Paper X Cendekia Days (TxC)
+        <span>2026</span>
+      </motion.h2>
+
+      <motion.p
+        className={styles.openingFrameSubtitle}
+        initial={{ opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          duration: 0.55,
+          delay: 0.3,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+      >
+        diselenggarakan melalui kolaborasi yang luar biasa
+      </motion.p>
+    </div>
+  );
+}
+
+interface OrganizationFrameProps {
+  frame: (typeof frames)[2] | (typeof frames)[3];
+}
+
+function OrganizationFrame({ frame }: OrganizationFrameProps) {
+  return (
+    <div className={styles.organizationFrame}>
+      <motion.h2
+        className={styles.organizationFrameTitle}
+        initial={{ opacity: 0, x: -25 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{
+          duration: 0.55,
+          delay: 0.12,
+        }}
+      >
+        {frame.title}
+      </motion.h2>
+
+      <motion.div
+        className={styles.organizationFrameLogoWrapper}
+        initial={{
+          opacity: 0,
+          scale: 1.15,
+          filter: "blur(10px)",
+        }}
+        animate={{
+          opacity: 1,
+          scale: 1,
+          filter: "blur(0px)",
+        }}
+        transition={{
+          duration: 0.6,
+          delay: 0.15,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+      >
+        <img
+          src={frame.logo}
+          alt={frame.logoAlt}
+          className={styles.organizationFrameLogo}
+        />
+      </motion.div>
+
+      <motion.p
+        className={styles.organizationFrameDescription}
+        initial={{
+          opacity: 0,
+          y: 25,
+          filter: "blur(8px)",
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+        }}
+        transition={{
+          duration: 0.65,
+          delay: 0.25,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+      >
+        {frame.description}
+      </motion.p>
+    </div>
   );
 }

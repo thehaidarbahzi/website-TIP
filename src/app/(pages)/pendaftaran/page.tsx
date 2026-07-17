@@ -43,8 +43,12 @@ export default function RegistrationPage() {
     leaderPassword: "",
     member1Name: "",
     member1Nim: "",
+    member1Wa: "",
+    member1Email: "",
     member2Name: "",
     member2Nim: "",
+    member2Wa: "",
+    member2Email: "",
   });
 
   useEffect(() => {
@@ -84,12 +88,28 @@ export default function RegistrationPage() {
     ketuaKtm: File | null;
     anggota1Ktm: File | null;
     anggota2Ktm: File | null;
-    buktiPembayaran: File | null;
+    ketuaFollowIg: File | null;
+    ketuaStoryIg: File | null;
+    ketuaTwibbon: File | null;
+    anggota1FollowIg: File | null;
+    anggota1StoryIg: File | null;
+    anggota1Twibbon: File | null;
+    anggota2FollowIg: File | null;
+    anggota2StoryIg: File | null;
+    anggota2Twibbon: File | null;
   }>({
     ketuaKtm: null,
     anggota1Ktm: null,
     anggota2Ktm: null,
-    buktiPembayaran: null,
+    ketuaFollowIg: null,
+    ketuaStoryIg: null,
+    ketuaTwibbon: null,
+    anggota1FollowIg: null,
+    anggota1StoryIg: null,
+    anggota1Twibbon: null,
+    anggota2FollowIg: null,
+    anggota2StoryIg: null,
+    anggota2Twibbon: null,
   });
 
   const handleChange = (
@@ -156,7 +176,6 @@ export default function RegistrationPage() {
   const steps = [
     { id: 1, title: "Data Tim & Kategori" },
     { id: 2, title: "Data Ketua & Anggota" },
-    { id: 3, title: "Bukti Pembayaran" },
   ];
 
   const handleNext = () => {
@@ -200,8 +219,16 @@ export default function RegistrationPage() {
       setError("Kartu pelajar/mahasiswa ketua tim wajib diunggah!");
       return;
     }
-    if (!files.buktiPembayaran) {
-      setError("Bukti pembayaran wajib diunggah!");
+    if (!files.ketuaFollowIg) {
+      setError("Bukti Follow IG ketua tim wajib diunggah!");
+      return;
+    }
+    if (!files.ketuaStoryIg) {
+      setError("Bukti Story IG ketua tim wajib diunggah!");
+      return;
+    }
+    if (!files.ketuaTwibbon) {
+      setError("Bukti Twibbon ketua tim wajib diunggah!");
       return;
     }
     setError("");
@@ -211,24 +238,29 @@ export default function RegistrationPage() {
       let leaderKtmFile: any = null;
       let member1KtmFile: any = null;
       let member2KtmFile: any = null;
-      let buktiPembayaran: any = null;
+      let ketuaFollowIgFile: any = null;
+      let ketuaStoryIgFile: any = null;
+      let ketuaTwibbonFile: any = null;
+      let anggota1FollowIgFile: any = null;
+      let anggota1StoryIgFile: any = null;
+      let anggota1TwibbonFile: any = null;
+      let anggota2FollowIgFile: any = null;
+      let anggota2StoryIgFile: any = null;
+      let anggota2TwibbonFile: any = null;
 
       try {
-        if (files.ketuaKtm) {
-          leaderKtmFile = await uploadFile(files.ketuaKtm, "ketua_ktm");
-        }
-        if (files.anggota1Ktm) {
-          member1KtmFile = await uploadFile(files.anggota1Ktm, "anggota1_ktm");
-        }
-        if (files.anggota2Ktm) {
-          member2KtmFile = await uploadFile(files.anggota2Ktm, "anggota2_ktm");
-        }
-        if (files.buktiPembayaran) {
-          buktiPembayaran = await uploadFile(
-            files.buktiPembayaran,
-            "bukti_pembayaran",
-          );
-        }
+        if (files.ketuaKtm) leaderKtmFile = await uploadFile(files.ketuaKtm, "ketua_ktm");
+        if (files.anggota1Ktm) member1KtmFile = await uploadFile(files.anggota1Ktm, "anggota1_ktm");
+        if (files.anggota2Ktm) member2KtmFile = await uploadFile(files.anggota2Ktm, "anggota2_ktm");
+        if (files.ketuaFollowIg) ketuaFollowIgFile = await uploadFile(files.ketuaFollowIg, "ketua_follow_ig");
+        if (files.ketuaStoryIg) ketuaStoryIgFile = await uploadFile(files.ketuaStoryIg, "ketua_story_ig");
+        if (files.ketuaTwibbon) ketuaTwibbonFile = await uploadFile(files.ketuaTwibbon, "ketua_twibbon");
+        if (files.anggota1FollowIg) anggota1FollowIgFile = await uploadFile(files.anggota1FollowIg, "anggota1_follow_ig");
+        if (files.anggota1StoryIg) anggota1StoryIgFile = await uploadFile(files.anggota1StoryIg, "anggota1_story_ig");
+        if (files.anggota1Twibbon) anggota1TwibbonFile = await uploadFile(files.anggota1Twibbon, "anggota1_twibbon");
+        if (files.anggota2FollowIg) anggota2FollowIgFile = await uploadFile(files.anggota2FollowIg, "anggota2_follow_ig");
+        if (files.anggota2StoryIg) anggota2StoryIgFile = await uploadFile(files.anggota2StoryIg, "anggota2_story_ig");
+        if (files.anggota2Twibbon) anggota2TwibbonFile = await uploadFile(files.anggota2Twibbon, "anggota2_twibbon");
       } catch (uploadErr) {
         const message =
           uploadErr instanceof Error ? uploadErr.message : "Gagal upload file.";
@@ -243,7 +275,15 @@ export default function RegistrationPage() {
         leaderKtmFile,
         member1KtmFile,
         member2KtmFile,
-        buktiPembayaran,
+        ketuaFollowIgFile,
+        ketuaStoryIgFile,
+        ketuaTwibbonFile,
+        anggota1FollowIgFile,
+        anggota1StoryIgFile,
+        anggota1TwibbonFile,
+        anggota2FollowIgFile,
+        anggota2StoryIgFile,
+        anggota2TwibbonFile,
       });
 
       if (!result.ok) {
@@ -252,7 +292,7 @@ export default function RegistrationPage() {
         return;
       }
 
-      setCurrentStep(4);
+      setCurrentStep(3);
       setIsLoading(false);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Terjadi kesalahan.";
@@ -265,7 +305,6 @@ export default function RegistrationPage() {
   const ketuaKtmRef = React.useRef<HTMLInputElement | null>(null);
   const anggota1Ref = React.useRef<HTMLInputElement | null>(null);
   const anggota2Ref = React.useRef<HTMLInputElement | null>(null);
-  const buktiPembayaranRef = React.useRef<HTMLInputElement | null>(null);
 
   if (isTimeLocked) {
     return (
@@ -296,18 +335,32 @@ export default function RegistrationPage() {
     );
   }
 
-  const FileUploadBox = ({ title, desc }: { title: string; desc: string }) => (
-    <div className="border-2 border-dashed border-purple-300/60 bg-white/50 rounded-2xl p-4 text-center hover:bg-purple-50/50 hover:border-[#B44DFF] transition-all duration-300 cursor-pointer group mt-2 shadow-sm">
-      <div className="w-12 h-12 bg-[#B44DFF]/10 text-[#B44DFF] rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform shadow-inner">
-        <FileImage size={24} />
-      </div>
-      <p className="text-sm font-bold text-slate-800 group-hover:text-[#B44DFF] transition-colors">
-        {title}
-      </p>
-      <p className="text-xs text-slate-500 mt-1">{desc}</p>
-      <input type="file" className="hidden" accept="image/*,.pdf" />
-    </div>
-  );
+  const FileUploadItem = ({ title, desc, field, isRequired }: { title: string; desc: string; field: keyof typeof files; isRequired?: boolean }) => {
+    return (
+      <label className="border border-dashed border-white/30 bg-white/5 rounded-[1.2rem] p-5 text-center hover:bg-white/10 hover:border-white/50 transition-all duration-300 cursor-pointer group mt-4 shadow-sm backdrop-blur-sm block">
+        <div className="w-14 h-14 bg-white/20 text-white rounded-[1rem] flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform shadow-inner border border-white/20">
+          <FileImage size={24} />
+        </div>
+        <p className="text-sm font-bold text-white group-hover:drop-shadow-md transition-all">
+          {title}
+        </p>
+        <p className="text-xs text-white/60 mt-1 font-medium">
+          {desc} {isRequired ? "(Wajib, PDF/JPG/PNG, maks. 1MB)" : "(Opsional, PDF/JPG/PNG, maks. 1MB)"}
+        </p>
+        {files[field] && (
+          <p className="text-xs text-green-300 mt-2 font-medium">
+            Dipilih: {files[field]?.name}
+          </p>
+        )}
+        <input
+          type="file"
+          className="hidden"
+          accept=".pdf,.jpg,.jpeg,.png"
+          onChange={handleFileChange(field)}
+        />
+      </label>
+    );
+  };
 
   return (
     <div className="min-h-screen pt-28 pb-12 px-4 md:px-8 relative">
@@ -489,38 +542,10 @@ export default function RegistrationPage() {
                         required
                       />
                     </div>
-                    <div
-                      className="border border-dashed border-white/30 bg-white/5 rounded-[1.2rem] p-5 text-center hover:bg-white/10 hover:border-white/50 transition-all duration-300 cursor-pointer group mt-4 shadow-sm backdrop-blur-sm"
-                      onClick={() => ketuaKtmRef.current?.click()}
-                      role="button"
-                      tabIndex={0}
-                      onKeyDown={(ev) => {
-                        if (ev.key === "Enter" || ev.key === " ")
-                          ketuaKtmRef.current?.click();
-                      }}
-                    >
-                      <div className="w-14 h-14 bg-white/20 text-white rounded-[1rem] flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform shadow-inner border border-white/20">
-                        <FileImage size={24} />
-                      </div>
-                      <p className="text-sm font-bold text-white group-hover:drop-shadow-md transition-all">
-                        Upload Scan Kartu Pelajar/Mahasiswa
-                      </p>
-                      <p className="text-xs text-white/60 mt-1 font-medium">
-                        Ketua Tim (Wajib, PDF/JPG/PNG, maks. 1MB)
-                      </p>
-                      {files.ketuaKtm && (
-                        <p className="text-xs text-green-300 mt-2 font-medium">
-                          Dipilih: {files.ketuaKtm.name}
-                        </p>
-                      )}
-                      <input
-                        ref={ketuaKtmRef}
-                        type="file"
-                        className="hidden"
-                        accept=".pdf,.jpg,.jpeg,.png"
-                        onChange={handleFileChange("ketuaKtm")}
-                      />
-                    </div>
+                    <FileUploadItem title="Upload Scan Kartu Pelajar/Mahasiswa" desc="Ketua Tim" field="ketuaKtm" isRequired={true} />
+                    <FileUploadItem title="Upload Bukti Follow IG" desc="Ketua Tim" field="ketuaFollowIg" isRequired={true} />
+                    <FileUploadItem title="Upload Bukti Story IG" desc="Ketua Tim" field="ketuaStoryIg" isRequired={true} />
+                    <FileUploadItem title="Upload Bukti Twibbon" desc="Ketua Tim" field="ketuaTwibbon" isRequired={true} />
                   </div>
                 </div>
 
@@ -554,38 +579,30 @@ export default function RegistrationPage() {
                       placeholder="Kosongkan jika tidak ada"
                       variant="glass"
                     />
-                    <div
-                      className="border border-dashed border-white/20 bg-white/5 rounded-[1.2rem] p-5 text-center hover:bg-white/10 hover:border-white/40 transition-all duration-300 cursor-pointer group mt-4 shadow-sm backdrop-blur-sm"
-                      onClick={() => anggota1Ref.current?.click()}
-                      role="button"
-                      tabIndex={0}
-                      onKeyDown={(ev) => {
-                        if (ev.key === "Enter" || ev.key === " ")
-                          anggota1Ref.current?.click();
-                      }}
-                    >
-                      <div className="w-14 h-14 bg-white/10 text-white/80 rounded-[1rem] flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform shadow-inner border border-white/10">
-                        <FileImage size={24} />
-                      </div>
-                      <p className="text-sm font-bold text-white/90 group-hover:text-white transition-all">
-                        Upload Scan Kartu Pelajar/Mahasiswa
-                      </p>
-                      <p className="text-xs text-white/50 mt-1 font-medium">
-                        Anggota 1 (Opsional)
-                      </p>
-                      {files.anggota1Ktm && (
-                        <p className="text-xs text-green-300 mt-2 font-medium">
-                          Dipilih: {files.anggota1Ktm.name}
-                        </p>
-                      )}
-                      <input
-                        ref={anggota1Ref}
-                        type="file"
-                        className="hidden"
-                        accept=".pdf,.jpg,.jpeg,.png"
-                        onChange={handleFileChange("anggota1Ktm")}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                      <Input
+                        name="member1Wa"
+                        value={formData.member1Wa}
+                        onChange={handleChange}
+                        label="Nomor WhatsApp Anggota 1"
+                        type="tel"
+                        placeholder="Contoh: 08123456789"
+                        variant="glass"
+                      />
+                      <Input
+                        name="member1Email"
+                        value={formData.member1Email}
+                        onChange={handleChange}
+                        label="Email Aktif Anggota 1"
+                        type="email"
+                        placeholder="email@contoh.com"
+                        variant="glass"
                       />
                     </div>
+                    <FileUploadItem title="Upload Scan Kartu Pelajar/Mahasiswa" desc="Anggota 1" field="anggota1Ktm" />
+                    <FileUploadItem title="Upload Bukti Follow IG" desc="Anggota 1" field="anggota1FollowIg" />
+                    <FileUploadItem title="Upload Bukti Story IG" desc="Anggota 1" field="anggota1StoryIg" />
+                    <FileUploadItem title="Upload Bukti Twibbon" desc="Anggota 1" field="anggota1Twibbon" />
                   </div>
                 </div>
 
@@ -619,125 +636,36 @@ export default function RegistrationPage() {
                       placeholder="Kosongkan jika tidak ada"
                       variant="glass"
                     />
-                    <div
-                      className="border border-dashed border-white/20 bg-white/5 rounded-[1.2rem] p-5 text-center hover:bg-white/10 hover:border-white/40 transition-all duration-300 cursor-pointer group mt-4 shadow-sm backdrop-blur-sm"
-                      onClick={() => anggota2Ref.current?.click()}
-                      role="button"
-                      tabIndex={0}
-                      onKeyDown={(ev) => {
-                        if (ev.key === "Enter" || ev.key === " ")
-                          anggota2Ref.current?.click();
-                      }}
-                    >
-                      <div className="w-14 h-14 bg-white/10 text-white/80 rounded-[1rem] flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform shadow-inner border border-white/10">
-                        <FileImage size={24} />
-                      </div>
-                      <p className="text-sm font-bold text-white/90 group-hover:text-white transition-all">
-                        Upload Scan Kartu Pelajar/Mahasiswa
-                      </p>
-                      <p className="text-xs text-white/50 mt-1 font-medium">
-                        Anggota 2 (Opsional)
-                      </p>
-                      {files.anggota2Ktm && (
-                        <p className="text-xs text-green-300 mt-2 font-medium">
-                          Dipilih: {files.anggota2Ktm.name}
-                        </p>
-                      )}
-                      <input
-                        ref={anggota2Ref}
-                        type="file"
-                        className="hidden"
-                        accept=".pdf,.jpg,.jpeg,.png"
-                        onChange={handleFileChange("anggota2Ktm")}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                      <Input
+                        name="member2Wa"
+                        value={formData.member2Wa}
+                        onChange={handleChange}
+                        label="Nomor WhatsApp Anggota 2"
+                        type="tel"
+                        placeholder="Contoh: 08123456789"
+                        variant="glass"
+                      />
+                      <Input
+                        name="member2Email"
+                        value={formData.member2Email}
+                        onChange={handleChange}
+                        label="Email Aktif Anggota 2"
+                        type="email"
+                        placeholder="email@contoh.com"
+                        variant="glass"
                       />
                     </div>
+                    <FileUploadItem title="Upload Scan Kartu Pelajar/Mahasiswa" desc="Anggota 2" field="anggota2Ktm" />
+                    <FileUploadItem title="Upload Bukti Follow IG" desc="Anggota 2" field="anggota2FollowIg" />
+                    <FileUploadItem title="Upload Bukti Story IG" desc="Anggota 2" field="anggota2StoryIg" />
+                    <FileUploadItem title="Upload Bukti Twibbon" desc="Anggota 2" field="anggota2Twibbon" />
                   </div>
                 </div>
               </div>
             )}
 
             {currentStep === 3 && (
-              <div className="space-y-8 animate-entrance relative z-10">
-                <div className="bg-white/10 backdrop-blur-2xl border border-white/20 p-8 rounded-[1.5rem] text-center shadow-[0_10px_30px_rgba(0,0,0,0.1)] relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none"></div>
-                  <div className="relative z-10">
-                    <div className="w-20 h-20 bg-white/20 border border-white/30 backdrop-blur-md text-white rounded-[1.2rem] flex items-center justify-center mx-auto mb-6 rotate-3 shadow-inner">
-                      <CreditCard size={40} />
-                    </div>
-                    <h3 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-amber-300 mb-2 drop-shadow-sm pb-1">
-                      Pembayaran Pendaftaran
-                    </h3>
-                    <p className="text-white/80 mb-6 font-medium">
-                      Silakan lakukan transfer pendaftaran ke rekening berikut:
-                    </p>
-                    <div className="bg-white/20 backdrop-blur-md px-6 py-4 rounded-[1.1rem] border border-white/30 inline-block shadow-inner mb-6 hover:bg-white/25 transition-all cursor-pointer">
-                      <p className="font-extrabold text-3xl tracking-wider text-yellow-300 drop-shadow-md">
-                        BCA 1234567890
-                      </p>
-                      <p className="text-sm text-white/80 font-bold mt-1">
-                        a.n. Tech Innovation Paper
-                      </p>
-                    </div>
-                    <div>
-                      <p className="font-black text-white bg-white/20 border border-white/30 backdrop-blur-md inline-block px-5 py-2.5 rounded-full shadow-inner">
-                        Nominal:{" "}
-                        <span className="text-lg ml-1">(Segera Diumumkan)</span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div
-                  className="border border-dashed border-white/40 bg-white/5 rounded-[1.5rem] p-12 text-center hover:bg-white/15 hover:border-white/60 transition-all duration-300 cursor-pointer group shadow-sm backdrop-blur-md"
-                  onClick={() => buktiPembayaranRef.current?.click()}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(ev) => {
-                    if (ev.key === "Enter" || ev.key === " ")
-                      buktiPembayaranRef.current?.click();
-                  }}
-                >
-                  <div className="w-20 h-20 bg-white/20 text-white border border-white/30 rounded-[1.2rem] flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:-rotate-3 transition-transform shadow-inner">
-                    <FileImage size={36} />
-                  </div>
-                  <p className="text-xl font-black text-cyan-300 group-hover:drop-shadow-md transition-all">
-                    Unggah Bukti Transaksi
-                  </p>
-                  <p className="text-sm text-white/60 mt-2 font-medium">
-                    Maks. 1MB (Format: .jpg, .png, .pdf)
-                  </p>
-                  {files.buktiPembayaran && (
-                    <p className="text-xs text-green-300 mt-2 font-medium">
-                      Dipilih: {files.buktiPembayaran.name}
-                    </p>
-                  )}
-                  <input
-                    ref={buktiPembayaranRef}
-                    type="file"
-                    className="hidden"
-                    accept=".pdf,.jpg,.jpeg,.png"
-                    onChange={handleFileChange("buktiPembayaran")}
-                  />
-                </div>
-
-                <div className="mt-8 bg-black/10 p-5 rounded-[1.1rem] border border-white/10 backdrop-blur-sm">
-                  <label className="flex items-start gap-4 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      className="mt-1 w-6 h-6 rounded border-white/30 bg-white/10 text-white focus:ring-white/50"
-                      required
-                    />
-                    <span className="text-sm font-bold text-white/90 leading-relaxed drop-shadow-sm">
-                      Saya menyatakan bahwa semua data dan bukti transaksi yang
-                      diunggah adalah asli, benar, dan dapat
-                      dipertanggungjawabkan.
-                    </span>
-                  </label>
-                </div>
-              </div>
-            )}
-
-            {currentStep === 4 && (
               <div className="space-y-6 animate-entrance text-center py-16 relative z-10">
                 <div className="w-32 h-32 bg-white/20 border-2 border-white/40 text-white rounded-[2rem] flex items-center justify-center mx-auto mb-8 shadow-inner backdrop-blur-md">
                   <Check size={64} strokeWidth={3} />
@@ -767,7 +695,7 @@ export default function RegistrationPage() {
               </div>
             )}
 
-            {currentStep < 4 && (
+            {currentStep < 3 && (
               <div className="flex flex-col-reverse sm:flex-row gap-4 mt-8 pt-8 border-t border-white/10 relative z-10">
                 {currentStep > 1 && (
                   <Button

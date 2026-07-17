@@ -40,7 +40,7 @@ export default function AdminUsersPage() {
     try {
       const { getUsers } = await import("@/app/lib/action/users");
       const data = await getUsers();
-      setUsers(data);
+      setUsers(data as User[]);
     } catch {
       setErr("Gagal memuat data user.");
     } finally {

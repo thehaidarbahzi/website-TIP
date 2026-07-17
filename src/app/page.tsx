@@ -1,9 +1,11 @@
 "use client";
 
 import HeroSection from "@/app/(utils)/components/sections/HeroSection";
-import TimelineSection from "@/app/(utils)/components/sections/TimelineSection";
-import CompetitionSection from "@/app/(utils)/components/sections/CompetitionSection";
+import TimelineSection from "@/components/sections/TimelineSection";
+import EventsSection from "@/components/sections/EventsSection";
+import CompetitionSection from "@/components/sections/CompetitionSection";
 import AboutUsSection from "@/app/(utils)/components/sections/AboutUsSection";
+import FaqSection from "@/components/sections/FaqSection";
 import SmoothScrollProvider from "@/app/(utils)/components/providers/SmoothScrollProvider";
 import AnimatedSection from "@/app/(utils)/components/providers/AnimatedSection";
 
@@ -12,9 +14,9 @@ export default function LandingPage() {
     <SmoothScrollProvider>
       <HeroSection />
       <AnimatedSection type="up" id="timeline-wrapper">
-        <div
-          className="relative w-full pb-16 bg-white"
-          style={{
+          <div
+            className="relative w-full pb-16"
+            style={{
             backgroundImage: "url('/hero/background.svg')",
             backgroundRepeat: "repeat-y",
             backgroundSize: "100%",
@@ -154,13 +156,27 @@ export default function LandingPage() {
             </svg>
           </div>
 
-          <TimelineSection />
           <AnimatedSection type="up" duration={0.9}>
             <CompetitionSection />
           </AnimatedSection>
-          <AnimatedSection type="up" duration={0.9} delay={0.15}>
-            <AboutUsSection />
+
+          <div className="mt-16 sm:mt-24">
+            <TimelineSection />
+          </div>
+
+          <AnimatedSection type="up" duration={0.9}>
+            <EventsSection />
           </AnimatedSection>
+
+          <div className="mt-16 sm:mt-24">
+            <AnimatedSection type="up" duration={0.9} delay={0.15}>
+              <AboutUsSection />
+            </AnimatedSection>
+          </div>
+
+          <div className="mt-16 sm:mt-24">
+            <FaqSection />
+          </div>
         </div>
       </AnimatedSection>
     </SmoothScrollProvider>

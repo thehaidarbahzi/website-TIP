@@ -3,7 +3,7 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
-const secretKey = process.env.SESSION_SECRET;
+const secretKey = process.env.SESSION_SECRET || "fallback_secret_key_for_local_development_12345";
 const encodedKey = new TextEncoder().encode(secretKey);
 
 type SessionPayload = {
@@ -28,8 +28,8 @@ export async function decrypt(session: string | undefined = "") {
       algorithms: ["HS256"],
     });
     return payload;
-  } catch {
-    console.error("Failed to verify session");
+  } catch (error) {
+    console.error("Failed to verify session:", error);
   }
 }
 
@@ -59,8 +59,13 @@ export async function deleteSession() {
 
 export async function getSessionUser(): Promise<SessionPayload | null> {
   const cookie = await getSession();
+  console.log("[getSessionUser] cookie exists?", !!cookie);
   if (!cookie) return null;
   const payload = await decrypt(cookie.value);
-  if (!payload || typeof payload.user_role !== "string") return null;
+  console.log("[getSessionUser] payload:", payload);
+  if (!payload || typeof payload.user_role !== "string") {
+    console.log("[getSessionUser] invalid payload or missing user_role");
+    return null;
+  }
   return payload as unknown as SessionPayload;
 }

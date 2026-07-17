@@ -6,7 +6,22 @@ import type { EventTimeline, EventCategory, EventStage } from "@/app/(utils)/typ
 export async function getEventTimeline(): Promise<EventTimeline> {
   const db = getFirebaseAdminDb();
   const snapshot = await db.ref("event").once("value");
-  const data = snapshot.val() as Record<string, Record<string, any>> | null;
+  let data = snapshot.val() as Record<string, Record<string, any>> | null;
+
+  if (!data) {
+    try {
+      const fs = require("fs");
+      const path = require("path");
+      const eJsonPath = path.join(process.cwd(), "e.json");
+      if (fs.existsSync(eJsonPath)) {
+        const fileContent = fs.readFileSync(eJsonPath, "utf-8");
+        const parsed = JSON.parse(fileContent);
+        data = parsed.event || null;
+      }
+    } catch (e) {
+      console.warn("Failed to load fallback e.json", e);
+    }
+  }
 
   if (!data) return {};
 

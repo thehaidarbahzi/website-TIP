@@ -236,21 +236,36 @@ function GuestHome({
   const cat = timeline?.[category as keyof typeof timeline];
 
   const now = Date.now();
-  const bypass =
-    typeof window !== "undefined"
-      ? localStorage.getItem("debug_time_bypass")
-      : null;
+  const [bypass, setBypass] = useState<string | null>(null);
 
-  function hasTimePassed(time?: number): boolean {
-    if (bypass === "1" || bypass === "2") return true;
+  useEffect(() => {
+    setBypass(localStorage.getItem("debug_time_bypass"));
+  }, []);
+
+  const handleBypass = (val: string | null) => {
+    if (val) {
+      localStorage.setItem("debug_time_bypass", val);
+    } else {
+      localStorage.removeItem("debug_time_bypass");
+    }
+    setBypass(val);
+    window.location.reload();
+  };
+
+  function hasTimePassed(time?: number, stageVal?: string): boolean {
+    if (bypass) {
+      if (bypass === "2") return true;
+      if (bypass === "1" && stageVal === "1") return true;
+      return false;
+    }
     if (!time) return false;
     return now >= time;
   }
 
   const abstrakAnnounce = cat?.pengumuman_abstrak?.time;
   const fullpaperAnnounce = cat?.pengumuman_fullpaper?.time;
-  const isFullpaper = hasTimePassed(abstrakAnnounce);
-  const isFinal = hasTimePassed(fullpaperAnnounce);
+  const isFullpaper = hasTimePassed(abstrakAnnounce, "1");
+  const isFinal = hasTimePassed(fullpaperAnnounce, "2");
   const isPoster = category === "poster";
   const isVerified = user.team_status === "verified";
 
@@ -283,35 +298,46 @@ function GuestHome({
             Pengumuman Terbaru
           </h2>
 
-          {!isVerified ? (
+          {user.team_status === "rejected" ? (
             <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-[2rem] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.15)] hover:-translate-y-2 hover:bg-white/15 transition-all duration-300 relative overflow-hidden group">
               <div className="flex items-start gap-6 relative z-10">
-                <div className={`w-16 h-16 rounded-[1.2rem] bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform duration-300 ${
-                  user.team_status === "rejected"
-                    ? "text-red-300"
-                    : "text-yellow-300"
-                }`}>
+                <div className="w-16 h-16 rounded-[1.2rem] bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform duration-300 text-red-300">
                   <BellRing size={32} />
                 </div>
                 <div>
-                  <h3 className={`text-xl font-black text-transparent bg-clip-text bg-gradient-to-r mb-2 drop-shadow-sm pb-1 ${
-                    user.team_status === "rejected"
-                      ? "from-red-200 to-red-400"
-                      : "from-yellow-200 to-amber-300"
-                  }`}>
-                    {user.team_status === "rejected"
-                      ? "Tim Anda Ditolak"
-                      : "Menunggu Verifikasi"}
+                  <h3 className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-200 to-red-400 mb-2 drop-shadow-sm pb-1">
+                    Tim Anda Ditolak
                   </h3>
                   <p className="text-white/80 text-base font-medium leading-relaxed">
-                    {user.team_status === "rejected"
-                      ? "Tim Anda tidak lolos verifikasi. Silakan hubungi panitia untuk informasi lebih lanjut."
-                      : "Tim Anda sedang menunggu verifikasi dari panitia. Anda belum dapat mengumpulkan karya saat ini."}
+                    Tim Anda tidak lolos verifikasi. Silakan hubungi panitia untuk informasi lebih lanjut.
                   </p>
                 </div>
               </div>
             </div>
-          ) : isFinal && !isPoster ? (
+          ) : isPoster ? (
+            <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-[2rem] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.15)] hover:-translate-y-2 hover:bg-white/15 hover:border-pink-400/50 transition-all duration-300 relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-br from-pink-400/10 to-purple-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="flex flex-col sm:flex-row items-start gap-6 relative z-10">
+                <div className="w-16 h-16 rounded-[1.2rem] bg-white/20 backdrop-blur-md border border-white/30 text-pink-300 flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform duration-300">
+                  <BellRing size={32} />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-200 to-purple-200 mb-3 drop-shadow-sm pb-1">
+                    Kumpulkan Karya Poster
+                  </h3>
+                  <p className="text-white/80 text-base font-medium leading-relaxed mb-6">
+                    Silakan kumpulkan poster dan dokumen penjelasan poster Anda sekarang.
+                  </p>
+                  <Link
+                    href="/dashboard/poster"
+                    className="inline-block bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/30 text-white text-base font-bold py-3.5 px-8 rounded-[1.2rem] shadow-[0_10px_25px_rgba(0,0,0,0.1)] hover:-translate-y-1 transition-all"
+                  >
+                    Kumpulkan Poster
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ) : isFinal ? (
             <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-[2rem] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.15)] hover:-translate-y-2 hover:bg-white/15 hover:border-orange-400/50 transition-all duration-300 relative overflow-hidden group">
               <div className="absolute inset-0 bg-gradient-to-br from-orange-400/10 to-amber-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <div className="flex flex-col sm:flex-row items-start gap-6 relative z-10">
@@ -335,7 +361,7 @@ function GuestHome({
                 </div>
               </div>
             </div>
-          ) : isFullpaper && !isPoster ? (
+          ) : isFullpaper ? (
             <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-[2rem] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.15)] hover:-translate-y-2 hover:bg-white/15 hover:border-green-400/50 transition-all duration-300 relative overflow-hidden group">
               <div className="absolute inset-0 bg-gradient-to-br from-green-400/10 to-emerald-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <div className="flex flex-col sm:flex-row items-start gap-6 relative z-10">
@@ -359,36 +385,26 @@ function GuestHome({
                 </div>
               </div>
             </div>
-          ) : isPoster ? (
-            <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-[2rem] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.15)] hover:-translate-y-2 hover:bg-white/15 transition-all duration-300 relative overflow-hidden group">
-              <div className="flex items-start gap-6 relative z-10">
-                <div className="w-16 h-16 rounded-[1.2rem] bg-white/20 backdrop-blur-md border border-white/30 text-pink-300 flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform duration-300">
-                  <BellRing size={32} />
-                </div>
-                <div>
-                  <h3 className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-200 to-purple-200 mb-2 drop-shadow-sm pb-1">
-                    Lomba Poster
-                  </h3>
-                  <p className="text-white/80 text-base font-medium leading-relaxed">
-                    Kumpulkan karya poster Anda sesuai jadwal yang berlaku.
-                  </p>
-                </div>
-              </div>
-            </div>
           ) : (
-            <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-[2rem] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.15)] hover:-translate-y-2 hover:bg-white/15 transition-all duration-300 relative overflow-hidden group">
-              <div className="flex items-start gap-6 relative z-10">
-                <div className="w-16 h-16 rounded-[1.2rem] bg-white/20 backdrop-blur-md border border-white/30 text-blue-300 flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform duration-300">
-                  <Clock size={32} />
+            <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-[2rem] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.15)] hover:-translate-y-2 hover:bg-white/15 hover:border-blue-400/50 transition-all duration-300 relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-blue-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="flex flex-col sm:flex-row items-start gap-6 relative z-10">
+                <div className="w-16 h-16 rounded-[1.2rem] bg-white/20 backdrop-blur-md border border-white/30 text-cyan-300 flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform duration-300">
+                  <FileText size={32} />
                 </div>
                 <div>
-                  <h3 className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 to-blue-200 mb-2 drop-shadow-sm pb-1">
-                    Menunggu Pengumuman
+                  <h3 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 to-blue-300 mb-3 drop-shadow-sm pb-1">
+                    Kumpulkan Abstrak
                   </h3>
-                  <p className="text-white/80 text-base font-medium leading-relaxed">
-                    Saat ini kami masih berada pada tahap pengumpulan karya atau
-                    penjurian. Pantau terus dashboard ini!
+                  <p className="text-white/80 text-base font-medium leading-relaxed mb-6">
+                    Silakan kumpulkan abstrak karya Anda sekarang sebagai tahap awal kompetisi.
                   </p>
+                  <Link
+                    href="/dashboard/abstrak"
+                    className="inline-block bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/30 text-white text-base font-bold py-3.5 px-8 rounded-[1.2rem] shadow-[0_10px_25px_rgba(0,0,0,0.1)] hover:-translate-y-1 transition-all"
+                  >
+                    Kumpulkan Abstrak
+                  </Link>
                 </div>
               </div>
             </div>

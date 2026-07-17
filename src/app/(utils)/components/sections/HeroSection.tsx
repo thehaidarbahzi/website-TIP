@@ -68,9 +68,9 @@ export default function HeroSection() {
 
         <div
           ref={decoRef}
-          className="pointer-events-none absolute inset-x-0 top-[-200] z-10 h-full"
+          className="pointer-events-none absolute inset-x-0 top-[-180px] z-10 h-full"
         >
-          <div className="absolute left-[-120] top-0 h-[clamp(11rem,34vw,19rem)] w-[clamp(12rem,35vw,24rem)] opacity-90 sm:opacity-100 lg:h-[31rem] lg:w-[36rem] hidden lg:block">
+          <div className="absolute left-[-100px] top-0 h-[clamp(11rem,34vw,19rem)] w-[clamp(12rem,35vw,24rem)] opacity-90 sm:opacity-100 lg:h-[31rem] lg:w-[36rem] hidden lg:block">
             <Image
               src="/hero/dekorasiHeader.svg"
               alt=""
@@ -81,7 +81,8 @@ export default function HeroSection() {
             />
           </div>
 
-          <div className="absolute right-[-120] top-0 h-[clamp(11rem,34vw,19rem)] w-[clamp(12rem,35vw,24rem)] opacity-90 sm:opacity-100 lg:h-[31rem] lg:w-[36rem] hidden lg:block">
+          {/* POJOK KANAN ATAS — dekorasi header (dalam keadaan terbalik horizontal) */}
+          <div className="absolute right-[-100px] top-0 h-[clamp(11rem,34vw,19rem)] w-[clamp(12rem,35vw,24rem)] opacity-90 sm:opacity-100 lg:h-[31rem] lg:w-[36rem] hidden lg:block">
             <Image
               src="/hero/dekorasiHeader.svg"
               alt=""
